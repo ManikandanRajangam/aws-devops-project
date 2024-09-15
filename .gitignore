@@ -1,0 +1,5 @@
+.idea
+infrastructure/.terraform
+jenkins/.terraform
+infrastructure/.terraform.lock.hcl
+jenkins/.terraform.lock.hcl

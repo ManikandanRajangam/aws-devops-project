@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/ManikandanRajangam/aws-devops-project.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'make build'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'make test'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sshagent(['your-ssh-credentials-id']) {
+                    sh 'scp -o StrictHostKeyChecking=no target/webserver-app.jar ec2-user@${env.WEB_SERVER_IP}:/path/to/deploy'
+                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@${env.WEB_SERVER_IP} "sudo systemctl restart your-app"'
+                }
+            }
+        }
+    }
+}
